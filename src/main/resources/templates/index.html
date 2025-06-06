@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome - HotProperties</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="overlay">
+    <div class="welcome-box">
+        <h1>Welcome to HotProperties</h1>
+        <p>Find your dream home or manage your listings with ease.</p>
+
+        <div class="button-group">
+            <a th:href="@{/login}" class="btn">Login</a>
+            <a th:href="@{/register}" class="btn">Register</a>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

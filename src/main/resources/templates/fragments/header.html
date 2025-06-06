@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Thymeleaf Fragment -->
+<div th:fragment="header">
+    <div class="header-container">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo" style="height: 60px;">
+        </div>
+        <div class="nav-link">
+            <a th:href="@{/}">Home</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

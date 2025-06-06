@@ -1,0 +1,36 @@
+/* Ensure body doesn't constrain header */
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+/* Full width header container */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Add these */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Left logo */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Right aligned link */
+.nav-link a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+
+.nav-link a:hover {
+    color: #007bff;
+}
