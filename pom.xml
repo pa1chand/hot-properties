@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>edu.depaul</groupId>
 	<artifactId>hot-properties</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.15</version>
 	<name>hot-properties</name>
 	<description>hot-properties</description>
 	<url/>

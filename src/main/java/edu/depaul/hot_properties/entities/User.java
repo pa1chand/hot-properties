@@ -32,6 +32,8 @@ public class User {
     private String email;
 
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Property> properties = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)  // EAGER fetch to load roles during login
     @JoinTable(
@@ -51,6 +53,7 @@ public class User {
     @JsonIgnore
     private List<User> subordinates = new ArrayList<>();
 
+    // agent
 
     @Column()
     private String profilePicture; // stores filename or relative path
@@ -98,6 +101,14 @@ public class User {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+    // 🫡
+    public String getRoleName() {
+        String res = "";
+        for (Role role : roles) {
+            res = role.getName();
+        }
+        return res;
     }
 
     public void setRoles(Set<Role> roles) { this.roles = roles; }
