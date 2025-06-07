@@ -8,18 +8,26 @@
 <body>
 <div class="login-container">
     <h1 th:text="'Hello, ' + ${user.firstName} + ' ' + ${user.lastName} + '!'">Hello!</h1>
+
     <p class="profile-table" th:text="'Welcome to your dashboard. Your role is ' + ${user.getRoleName()}"></p>
     <ul class="no-bullets">
         <li><a th:href="@{/profile}">My Profile</a></li>
         <li><a th:href="@{/settings}">Account Settings</a></li>
 
-        <li th:if="${#authorization.expression('hasRole(''MANAGER'')')}">
-            <a th:href="@{/manager/team}">View All Employees</a>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a th:href="@{/admin/users}">Manage Users</a>
+        </li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a th:href="@{/admin/createagent}">Add Agent</a>
         </li>
 
-        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-            <a th:href="@{/admin/users}">View All Users</a>
+        <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
+            <a th:href="@{/agent/managelistings}">Manage Listings</a>
         </li>
+        <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
+            <a th:href="@{/agent/addproperty}">Add New Property</a>
+        </li>
+
 
         <li><a class="section-spacing" th:href="@{/logout}">Log Out</a></li>
     </ul>
