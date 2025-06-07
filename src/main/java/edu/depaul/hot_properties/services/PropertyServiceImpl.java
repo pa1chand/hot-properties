@@ -2,6 +2,7 @@ package edu.depaul.hot_properties.services;
 
 import edu.depaul.hot_properties.entities.Property;
 import edu.depaul.hot_properties.entities.PropertyImage;
+import edu.depaul.hot_properties.entities.User;
 import edu.depaul.hot_properties.repositories.PropertyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,18 +17,28 @@ import java.util.UUID;
 @Service
 public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
+    private final UserService userService;
 
-    public PropertyServiceImpl(PropertyRepository propertyRepository) {
+    public PropertyServiceImpl(PropertyRepository propertyRepository, UserService userService) {
+
         this.propertyRepository = propertyRepository;
+        this.userService = userService;;
+
     }
     @Override
     public Property addProperty(Property property) {
+        // Many-to-one: the user who listed the property.
+        User currentUser = userService.getCurrentUser();
+        property.setUser(currentUser);
+
         propertyRepository.save(property);
+
         return property;
     }
 
     @Override
     public String storeProfilePictures(Long propertyId, List<MultipartFile> files) {
+
         try{
             // find property
             Property property = propertyRepository.findById(propertyId)
@@ -55,6 +66,7 @@ public class PropertyServiceImpl implements PropertyService {
             throw new RuntimeException("Failed to store profile picture", ex);
         }
     }
+
 
     @Override
     public void updateProperty(Property savedProperty) {

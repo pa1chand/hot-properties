@@ -5,6 +5,7 @@ import edu.depaul.hot_properties.entities.Property;
 import edu.depaul.hot_properties.services.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/property")
 public class PropertyController {
     private final PropertyService propertyService;
@@ -47,9 +48,5 @@ public class PropertyController {
         }
         return "testing";
     }
-
-
-
-
-
 }
+
