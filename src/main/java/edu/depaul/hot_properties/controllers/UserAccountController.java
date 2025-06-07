@@ -130,13 +130,48 @@ public class UserAccountController {
         model.addAttribute("users", userService.getAllUsers());
         return "all_users";
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/createagent")
+    public String showCreateAgentForm(Model model) {
+        model.addAttribute("user", new User() );
+        return "createagent";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/createagent")
+    public String createAgent(@ModelAttribute("user") User user,
+                               @RequestParam(value = "file", required = false) MultipartFile file,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            // First, register the user (this will assign them an ID)
+            List<String> roleNames = List.of("ROLE_AGENT");
+            User savedUser = userService.registerNewUser(user, roleNames);
+
+            // Then, store the profile picture (if uploaded) and update the user record
+            if (file != null && !file.isEmpty()) {
+                String filename = userService.storeProfilePicture(savedUser.getId(), file);
+                savedUser.setProfilePicture(filename);
+                // Save again to persist the filename
+                userService.updateUser(savedUser);
+            }
+
+            redirectAttributes.addFlashAttribute("successMessage", "Registration successful.");
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
+            return "redirect:/register";
+        }
+    }
+
+    //not working will finish after I sync to get properties code
 
     @PreAuthorize("hasRole('AGENT')")
-    @GetMapping("/manager/team")
-    public String showMyTeam(Model model) {
-        model.addAttribute("team", userService.getTeamForCurrentManager());
+    @GetMapping("/agent/managelistings")
+    public String manageListing(Model model) {
+        model.addAttribute("listings", userService.getTeamForCurrentManager());
         return "my_team";
     }
+
 
     // === REGISTRATION ===
     @GetMapping("/register")
