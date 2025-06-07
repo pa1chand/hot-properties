@@ -35,7 +35,7 @@ public class Property {
 
 
     //• One-to-many: images of the property.
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     List<PropertyImage> images = new ArrayList<>();
     /*
     //• Many-to-many: users who have favorited this property.

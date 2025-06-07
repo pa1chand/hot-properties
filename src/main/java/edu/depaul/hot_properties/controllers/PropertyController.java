@@ -31,7 +31,7 @@ public class PropertyController {
     // add property
 
     @PostMapping("/add")
-    public String addProperty(@ModelAttribute("property") Property property,
+    public String addProperty(@ModelAttribute Property property,
                               @RequestParam(value = "file", required = false) List<MultipartFile> files,
                               RedirectAttributes redirectAttributes
                               ) {
