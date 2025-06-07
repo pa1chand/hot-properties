@@ -102,7 +102,7 @@ public class User {
     public Set<Role> getRoles() {
         return roles;
     }
-    // 🫡
+    // 🫡 there will be only one role
     public String getRoleName() {
         String res = "";
         for (Role role : roles) {

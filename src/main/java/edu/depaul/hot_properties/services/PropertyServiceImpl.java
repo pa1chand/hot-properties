@@ -1,14 +1,16 @@
 package edu.depaul.hot_properties.services;
 
 import edu.depaul.hot_properties.entities.Property;
-import edu.depaul.hot_properties.exceptions.InvalidPropertyParameterException;
+import edu.depaul.hot_properties.entities.PropertyImage;
 import edu.depaul.hot_properties.repositories.PropertyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,28 +22,43 @@ public class PropertyServiceImpl implements PropertyService {
     }
     @Override
     public Property addProperty(Property property) {
-        if (propertyRepository.existsById(property.getId())) {
-            throw new InvalidPropertyParameterException("property id exists already");
-        }
-
-        return null;
+        propertyRepository.save(property);
+        return property;
     }
 
-    // to store image then use update method it in the controller
     @Override
-    public String storeProfilePicture(Long propertyId, MultipartFile file) {
-        try {
-           String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-
-           // Resolve absolute path relative to the project directory
+    public String storeProfilePictures(Long propertyId, List<MultipartFile> files) {
+        try{
+            // find property
+            Property property = propertyRepository.findById(propertyId)
+                    .orElseThrow(() -> new RuntimeException("storeProfilePictures in PropertyServiceImpl is not working"));
+            // Resolve absolute path relative to the project directory
             Path uploadPath = Paths.get(System.getProperty("user.dir"), "uploads", "profile-pictures");
             Files.createDirectories(uploadPath);
 
-            // Locate property and remove previous image (if any)
-            Property property = propertyRepository.findById(propertyId).orElseThrow();
+            // locate and remove previous image (if any) skipped no needed, will keep adding this
 
-            if (property.get)
+            // avoid image overlapped
+            for (MultipartFile file : files) {
+                String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                Path filePath = uploadPath.resolve(filename);
+                file.transferTo(filePath.toFile());
+                // save image to property images.add(propertyImage); using addImage method
+                PropertyImage image = new PropertyImage();
+                image.setImageFileName(filename);
+                property.addImage(image);
+            }
+            propertyRepository.save(property);
+            return "many files uploaded";
+        } catch (IOException ex) {
+            System.out.println("Failed to save file: " + ex.getMessage());
+            throw new RuntimeException("Failed to store profile picture", ex);
         }
+    }
+
+    @Override
+    public void updateProperty(Property savedProperty) {
+
     }
 
 }

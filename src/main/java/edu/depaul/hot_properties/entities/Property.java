@@ -37,12 +37,12 @@ public class Property {
     //• One-to-many: images of the property.
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     List<PropertyImage> images = new ArrayList<>();
-
+    /*
     //• Many-to-many: users who have favorited this property.
     @ManyToMany(mappedBy = "favoritedProperties")
     List<User> favoritedUser = new ArrayList<>();
 
-    /*
+
     // One-to-many: Message
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Message> associatedProperty = new ArrayList<>();
@@ -114,6 +114,19 @@ public class Property {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<PropertyImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<PropertyImage> images) {
+        this.images = images;
+    }
+
+    public void addImage(PropertyImage propertyImage) {
+        images.add(propertyImage);
+        propertyImage.setProperty(this);
     }
 }
 
