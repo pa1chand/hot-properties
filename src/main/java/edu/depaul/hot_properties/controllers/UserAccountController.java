@@ -8,6 +8,7 @@ import edu.depaul.hot_properties.services.AuthService;
 import edu.depaul.hot_properties.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
@@ -33,7 +34,14 @@ public class UserAccountController {
         this.authService = authService;
         this.userService = userService;
     }
+    // 🫡app version
+    @Value("${foo.app.version}")
+    private String applicationVersion;
 
+    @ModelAttribute("applicationVersion")
+    public String getApplicationVersion() {
+        return applicationVersion;
+    }
     @GetMapping({"/", "/index"})
     public String showIndex() {
         return "index";

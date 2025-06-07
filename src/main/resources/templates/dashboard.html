@@ -8,10 +8,10 @@
 <body>
 <div class="login-container">
     <h1 th:text="'Hello, ' + ${user.firstName} + ' ' + ${user.lastName} + '!'">Hello!</h1>
-<!--    <h2 th:text="'Your role: ' + ${user.} "> </h2>-->
-    <p class="profile-table">Welcome to your dashboard.</p>
+
+    <p class="profile-table" th:text="'Welcome to your dashboard. Your role is ' + ${user.getRoleName()}"></p>
     <ul class="no-bullets">
-        <li><a th:href="@{/profile}">View Profile</a></li>
+        <li><a th:href="@{/profile}">My Profile</a></li>
         <li><a th:href="@{/settings}">Account Settings</a></li>
 
         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
