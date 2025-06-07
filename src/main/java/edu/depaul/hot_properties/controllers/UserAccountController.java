@@ -162,12 +162,12 @@ public class UserAccountController {
                 userService.updateUser(savedUser);
             }
 
-            redirectAttributes.addFlashAttribute("successMessage", "Registration successful.");
-            return "redirect:/login";
+            redirectAttributes.addFlashAttribute("successMessage", "Agent created successfully.");
+            return "redirect:/dashboard";
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
-            return "redirect:/register";
+            return "redirect:/dashboard";
         }
     }
 
