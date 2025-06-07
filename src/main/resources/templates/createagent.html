@@ -13,7 +13,7 @@
     <h1>Create Agent</h1>
     <div class="error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
     <div class="success" th:if="${successMessage}" th:text="${successMessage}"></div>
-    <form method="post" th:action="@{/register}" th:object="${user}" enctype="multipart/form-data">
+    <form method="post" th:action="@{/admin/createagent}" th:object="${user}" enctype="multipart/form-data">
 
         <label for="username">Username</label>
         <input id="username" required="" th:field="*{username}" type="text"/>
