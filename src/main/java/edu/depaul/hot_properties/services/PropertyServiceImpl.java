@@ -73,4 +73,8 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
 
+    @Override
+    public List<Property> getAllProperties() {
+        return propertyRepository.findAll();
+    }
 }

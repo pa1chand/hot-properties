@@ -29,6 +29,9 @@
         <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
             <a th:href="@{/agent/addproperty}">Add New Property</a>
         </li>
+        <li th:if="${#authorization.expression('hasRole(''BUYER'')')}">
+            <a th:href="@{/property/list}">Browse Properties</a>
+        </li>
 
 
         <li><a class="section-spacing" th:href="@{/logout}">Log Out</a></li>

@@ -3,6 +3,7 @@ package edu.depaul.hot_properties.controllers;
 
 import edu.depaul.hot_properties.entities.Property;
 import edu.depaul.hot_properties.services.PropertyService;
+import edu.depaul.hot_properties.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,14 @@ public class PropertyController {
 
         }
         return "testing";
+    }
+    @GetMapping("/list")
+    public String browseProperties(@RequestParam(required = false) String location, Model model) {
+        List<Property> properties;
+        properties = propertyService.getAllProperties();
+
+        model.addAttribute("properties", properties);
+        return "list";
     }
 }
 
