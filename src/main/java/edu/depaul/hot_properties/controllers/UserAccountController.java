@@ -131,6 +131,26 @@ public class UserAccountController {
         return "all_users";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users/admin")
+    public String manageUsers(Model model) {
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "manage_users";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            userService.deleteUserById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete user: " + e.getMessage());
+        }
+        return "redirect:/users/admin";
+    }
+
     @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/manager/team")
     public String showMyTeam(Model model) {

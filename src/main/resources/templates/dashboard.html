@@ -4,13 +4,17 @@
 <head>
     <title>User Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
+<div class="overlay">
 <div class="login-container">
     <h1 th:text="'Hello, ' + ${user.firstName} + ' ' + ${user.lastName} + '!'">Hello!</h1>
     <p class="profile-table">Welcome to your dashboard.</p>
     <ul class="no-bullets">
-        <li><a th:href="@{/profile}">View Profile</a></li>
+        <li><a th:href="@{/profile}">My Profile</a></li>
         <li><a th:href="@{/settings}">Account Settings</a></li>
 
         <li th:if="${#authorization.expression('hasRole(''MANAGER'')')}">
@@ -20,9 +24,13 @@
         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
             <a th:href="@{/admin/users}">View All Users</a>
         </li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a th:href="@{/users/admin}">Manage Users</a>
+        </li>
 
         <li><a class="section-spacing" th:href="@{/logout}">Log Out</a></li>
     </ul>
+</div>
 </div>
 </body>
 </html>

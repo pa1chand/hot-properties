@@ -25,6 +25,9 @@ public interface UserService {
     @PreAuthorize("hasRole('ADMIN')")
     List<User> getAllUsers();
 
+    @PreAuthorize("hasRole('ADMIN')")
+    void deleteUserById(Long id);
+
     @PreAuthorize("hasRole('MANAGER')")
     List<User> getTeamForCurrentManager();
 
