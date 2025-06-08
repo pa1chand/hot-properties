@@ -18,12 +18,10 @@ import java.util.List;
 @RequestMapping("/property")
 public class PropertyController {
     private final PropertyService propertyService;
-    private final UserService userService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService, UserService userService) {
+    public PropertyController(PropertyService propertyService) {
         this.propertyService = propertyService;
-        this.userService = userService;
     }
     // === AGENT, ADMIN + ADDING PROPERTY FORM
     @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
@@ -53,7 +51,6 @@ public class PropertyController {
     }
     @GetMapping("/list")
     public String browseProperties(@RequestParam(required = false) String location, Model model) {
-        //userService.preparePropertyModel(model);
         List<Property> properties;
         properties = propertyService.getAllProperties();
 
