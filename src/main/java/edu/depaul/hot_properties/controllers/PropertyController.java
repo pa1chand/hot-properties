@@ -3,6 +3,7 @@ package edu.depaul.hot_properties.controllers;
 
 import edu.depaul.hot_properties.entities.Property;
 import edu.depaul.hot_properties.services.PropertyService;
+import edu.depaul.hot_properties.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ import java.util.List;
 @RequestMapping("/property")
 public class PropertyController {
     private final PropertyService propertyService;
+    private final UserService userService;
 
     @Autowired
-    public PropertyController(PropertyService propertyService) {
+    public PropertyController(PropertyService propertyService, UserService userService) {
         this.propertyService = propertyService;
+        this.userService = userService;
     }
     // === AGENT, ADMIN + ADDING PROPERTY FORM
     @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
@@ -47,6 +50,15 @@ public class PropertyController {
 
         }
         return "testing";
+    }
+    @GetMapping("/list")
+    public String browseProperties(@RequestParam(required = false) String location, Model model) {
+        //userService.preparePropertyModel(model);
+        List<Property> properties;
+        properties = propertyService.getAllProperties();
+
+        model.addAttribute("properties", properties);
+        return "list";
     }
 }
 

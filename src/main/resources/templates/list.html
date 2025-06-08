@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>List Properties</title>
+</head>
+<body>
+<div class="container">
+  <h1>List Available Properties</h1>
+
+  <!-- Filter Form -->
+  <form th:action="@{/list}" method="get">
+    <input type="text" name="location" th:value="${location}" placeholder="Filter by location"/>
+    <button type="submit">Search</button>
+  </form>
+
+  <br/>
+
+  <!-- Property Listings -->
+  <div th:if="${#lists.isEmpty(properties)}">
+    <p>No properties found.</p>
+  </div>
+
+  <div th:if="${!#lists.isEmpty(properties)}">
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Location</th>
+        <th>Price</th>
+        <th>Size</th>
+        <th>Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="property : ${properties}">
+        <td th:text="${property.title}">Title</td>
+        <td th:text="${property.location}">Location</td>
+        <td th:text="${property.price}">Price</td>
+        <td th:text="${property.size}">Size</td>
+        <td th:text="${property.description}">Description</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
