@@ -7,39 +7,44 @@
 </head>
 <body>
 <div class="container">
-    <h1>My Team</h1>
+    <h1>Manage Your Properties</h1>
     <table>
         <thead>
         <tr>
-            <th>Username</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Photo</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Location</th>
+            <th>Size</th>
+            <th>Description</th>
+<!--            <th>Images</th>-->
+<!--            <th>Favorites</th>-->
+<!--            <th>Actions</th>-->
         </tr>
         </thead>
         <tbody>
-        <tr th:each="u : ${team}">
-            <td th:text="${u.username}">username</td>
-            <td th:text="${u.firstName + ' ' + u.lastName}">Full Name</td>
-            <td th:text="${u.email}">email</td>
-            <td>
-                <ul class="roles-list">
-                    <li th:each="r : ${u.roles}" th:text="${r.name}">ROLE_USER</li>
-                </ul>
-            </td>
-            <!-- ✅ Thumbnail image -->
-            <td>
-                <img th:if="${u.profilePicture != null}"
-                     th:src="@{'/profile-pictures/' + ${u.profilePicture}}"
-                     alt="Profile"
-                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #aaa;"/>
+        <tr th:each="l : ${listings}">
+            <td th:text="${l.title}">Title</td>
+            <td th:text="${l.price}">Price</td>
+            <td th:text="${l.location}">Location</td>
+            <td th:text="${l.size}">Location</td>
+            <td th:text="${l.description}">Description</td>
+<!--            <td>-->
+<!--                <ul class="roles-list">-->
+<!--                    <li th:each="r : ${u.images}" th:text="${r.name}">Images</li>-->
+<!--                </ul>-->
+<!--            </td>-->
+<!--            &lt;!&ndash; ✅ Thumbnail image &ndash;&gt;-->
+<!--            <td>-->
+<!--                <img th:if="${u.profilePicture != null}"-->
+<!--                     th:src="@{'/profile-pictures/' + ${u.profilePicture}}"-->
+<!--                     alt="Profile"-->
+<!--                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #aaa;"/>-->
 
-                <img th:if="${u.profilePicture == null}"
-                     th:src="@{'/profile-pictures/default.jpg'}"
-                     alt="Default Profile"
-                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #aaa;"/>
-            </td>
+<!--                <img th:if="${u.profilePicture == null}"-->
+<!--                     th:src="@{'/profile-pictures/default.jpg'}"-->
+<!--                     alt="Default Profile"-->
+<!--                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #aaa;"/>-->
+<!--            </td>-->
         </tr>
         </tbody>
     </table>

@@ -13,5 +13,11 @@ public interface PropertyService {
 
     void updateProperty(Property savedProperty);
 
-    List<Property> getAllProperties();
+
+    List<Property> getPropertyByAgentId(Long agentId);
+
+
+
+
+
 }

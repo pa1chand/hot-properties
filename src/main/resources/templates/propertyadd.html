@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Property</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="main-wrapper">
+    <div class="container">
+        <h1>Add Property</h1>
+        <div class="error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <div class="success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <form method="post" th:action="@{/property/add}" th:object="${property}" enctype="multipart/form-data">
+
+            <label for="title">Title</label>
+            <input id="title" required="" th:field="*{title}" type="text"/>
+
+            <label for="price">Price</label>
+            <input id="price" required="" th:field="*{price}" type="text"/>
+
+            <label for="location">Location</label>
+            <input id="location" required="" th:field="*{location}" type="text"/>
+
+            <label for="size">Size(sf ft)</label>
+            <input id="size" required="" th:field="*{size}" type="text"/>
+
+            <label for="description">Description</label>
+            <input id="description" required="" th:field="*{description}" type="text"/>
+
+<!--            <label for="f">Upload Property Images (optional)</label>-->
+<!--            <input id="profilePicture" type="file" name="file" accept="image/*"/>-->
+
+            <br/><br/>
+            <button class="submit-btn" type="submit">Add property</button>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>
