@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -47,8 +48,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void prepareDashboardModel(Model model) {
         CurrentUserContext context = getCurrentUserContext();
+        User user = context.user();
+        Authentication auth = context.auth();
         model.addAttribute("user", context.user());
         model.addAttribute("authorization", context.auth());
+
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            List<User> allUsers = userRepository.findAll();
+            model.addAttribute("admin", allUsers);
+            model.addAttribute("dashboardType", "admin");
+
+        } else if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_BUYER"))) {
+            List<User> allUsers = userRepository.findAll();
+            model.addAttribute("buyer", allUsers);
+            model.addAttribute("dashboardType", "buyer");
+
+        }
     }
 
     @Override
