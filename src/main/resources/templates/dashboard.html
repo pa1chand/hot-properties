@@ -28,8 +28,16 @@
             <a th:href="@{/users/admin}">Manage Users</a>
         </li>
 
+
+        <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
+            <a th:href="@{/property/managelistings}">Manage Listings</a>
+        </li>
+        <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
+            <a th:href="@{/property/add}">Add New Property</a>
+
         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
             <a th:href="@{/admin/createagent}">Add Agent</a>
+
         </li>
 
 
