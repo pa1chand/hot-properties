@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <title>List Properties</title>
+  <link rel="stylesheet" th:href="@{/css/header.css}"/>
 </head>
+
 <body>
+<div class="header">
+  <div th:replace="fragments/header :: header"></div>
+  <div class="back-link">
+    <a th:href="@{/dashboard}">← Back to Dashboard</a>
+  </div>
+</div>
 <div class="container">
   <h1>List Available Properties</h1>
 
   <!-- Filter Form -->
-  <form th:action="@{/list}" method="get">
-    <input type="text" name="location" th:value="${location}" placeholder="Filter by location"/>
+  <form th:action="@{/list}" method="get" th:object="${properties}">
+    <label for="location">Zip Code</label>
+    <input type="text" id="location" th:value="${location}" placeholder="Filter by location"/>
+
+    <label for="size">Min sq Ft</label>
+    <input type="number" id="size" th:value="${size}" >
+
+    <label for="price">Min Price</label>
+    <input type="number" id="price" th:value="${price}" >
+
+
     <button type="submit">Search</button>
   </form>
 
@@ -38,6 +56,31 @@
         <td th:text="${property.price}">Price</td>
         <td th:text="${property.size}">Size</td>
         <td th:text="${property.description}">Description</td>
+        <td th:each="image : ${property.images}">
+            <img th:src="@{'/uploads/profile-pictures/' + ${image.imageFileName}}" alt="property image"
+              width="200" height="200"
+            />
+        </td>
+        <td >
+          <a th:href="@{'/properties/view/' + ${property.id}}">View Details</a>
+        </td>
+        <td>
+
+             <!-- favorite and unfavorite -->
+             <!-- remove from the favorite -->
+             <!-- set backend parameter propertyId -->
+            <form th:action="@{/favorites/remove}" method="post">
+
+              <input type="hidden" name="propertyId" th:value="${property.id}" />
+              <button type="submit">Unfavorite</button>
+            </form>
+            <!-- add to favorite from the list-->
+            <form th:action="@{/favorites/add}" method="post">
+              <input type="hidden" name="propertyId" th:value="${property.id}" />
+              <button type="submit">Favorite</button>
+            </form>
+
+        </td>
       </tr>
       </tbody>
     </table>

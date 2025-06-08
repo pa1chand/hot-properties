@@ -84,6 +84,9 @@ public class UserAccountController {
         return "dashboard";
     }
 
+    // show the current url
+
+
     @GetMapping("/profile")
     @PreAuthorize("hasAnyRole('BUYER', 'AGENT', 'ADMIN')")
     public String showProfile(Model model) {

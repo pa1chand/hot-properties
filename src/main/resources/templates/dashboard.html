@@ -30,7 +30,11 @@
             <a th:href="@{/agent/addproperty}">Add New Property</a>
         </li>
         <li th:if="${#authorization.expression('hasRole(''BUYER'')')}">
-            <a th:href="@{/property/list}">Browse Properties</a>
+            <a th:href="@{/properties/list}">Browse Properties</a>
+        </li>
+
+        <li th:if="${#authorization.expression('hasRole(''BUYER'')')}">
+            <a th:href="@{/favorites/favorites}">My Favorite Properties</a>
         </li>
 
 

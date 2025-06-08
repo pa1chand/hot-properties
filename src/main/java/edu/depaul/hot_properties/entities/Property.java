@@ -28,6 +28,10 @@ public class Property {
     @Column(nullable = false)
     private Integer size;
 
+    // one-to-many, one property can be favorited my many users
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
+
     //• Many-to-one: the user who listed the property.
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -37,12 +41,12 @@ public class Property {
     //• One-to-many: images of the property.
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     List<PropertyImage> images = new ArrayList<>();
-    /*
+
     //• Many-to-many: users who have favorited this property.
     @ManyToMany(mappedBy = "favoritedProperties")
     List<User> favoritedUser = new ArrayList<>();
 
-
+    /*
     // One-to-many: Message
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Message> associatedProperty = new ArrayList<>();
