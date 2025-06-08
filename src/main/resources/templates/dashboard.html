@@ -28,6 +28,11 @@
             <a th:href="@{/users/admin}">Manage Users</a>
         </li>
 
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <a th:href="@{/admin/createagent}">Add Agent</a>
+        </li>
+
+
         <li><a class="section-spacing" th:href="@{/logout}">Log Out</a></li>
     </ul>
 </div>
