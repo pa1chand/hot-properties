@@ -1,10 +1,10 @@
 package edu.depaul.hot_properties.controllers;
 
 
+import edu.depaul.hot_properties.entities.Property;
 import edu.depaul.hot_properties.entities.User;
-
 import edu.depaul.hot_properties.services.AuthService;
-
+import edu.depaul.hot_properties.services.PropertyService;
 import edu.depaul.hot_properties.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +29,12 @@ public class UserAccountController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final PropertyService propertyService;
 
-    public UserAccountController(AuthService authService, UserService userService) {
+    public UserAccountController(AuthService authService, UserService userService, PropertyService propertyService) {
         this.authService = authService;
         this.userService = userService;
+        this.propertyService = propertyService;
     }
     // 🫡app version
     @Value("${foo.app.version}")
@@ -173,10 +175,41 @@ public class UserAccountController {
 
     //not working will finish after I sync to get properties code
 
+    // === AGENT, ADMIN + ADDING PROPERTY FORM
+    @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
+    @GetMapping("/property/add")
+    public String showAddProperty(Model model) {
+        model.addAttribute("property", new Property());
+        return "propertyadd";
+    }
+    // add property
+    @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
+    @PostMapping("/property/add")
+    public String addProperty(@ModelAttribute("property") Property property,
+                              @RequestParam(value = "file", required = false) List<MultipartFile> files,
+                              RedirectAttributes redirectAttributes
+    ) {
+        try {
+            Property savedProperty = propertyService.addProperty(property);
+
+            // Then, store the profile picture (if uploaded) and update the property
+            if (files != null && !files.isEmpty()) {
+                propertyService.storeProfilePictures(savedProperty.getId(), files);
+            }
+            redirectAttributes.addFlashAttribute("successMessage", "Property added successfully.");
+            return "redirect:/dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
+            return "redirect:/dashboard";
+        }
+        //return "propertyadd";
+    }
     @PreAuthorize("hasRole('AGENT')")
-    @GetMapping("/agent/managelistings")
+    @GetMapping("/property/managelistings")
     public String manageListing(Model model) {
-        model.addAttribute("listings", userService.getTeamForCurrentManager());
+        User currentUser = userService.getCurrentUser();
+        model.addAttribute("listings", propertyService.getPropertyByAgentId(currentUser.getId()));
+
         return "my_team";
     }
 
