@@ -20,6 +20,7 @@ public class PropertyController {
         this.userService = userService;
         this.authService = authService;
     }
+
 //    // === AGENT, ADMIN + ADDING PROPERTY FORM
 //    @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
 //    @GetMapping("/add")
@@ -55,5 +56,6 @@ public class PropertyController {
 //
 //        return "my_team";
 //    }
+
 }
 

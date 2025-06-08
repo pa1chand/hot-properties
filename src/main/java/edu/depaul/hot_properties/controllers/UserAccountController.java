@@ -175,6 +175,7 @@ public class UserAccountController {
 
     //not working will finish after I sync to get properties code
 
+
     // === AGENT, ADMIN + ADDING PROPERTY FORM
     @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
     @GetMapping("/property/add")
@@ -204,6 +205,28 @@ public class UserAccountController {
         }
         //return "propertyadd";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users/admin")
+    public String manageUsers(Model model) {
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "manage_users";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            userService.deleteUserById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete user: " + e.getMessage());
+        }
+        return "redirect:/users/admin";
+    }
+
+
     @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/property/managelistings")
     public String manageListing(Model model) {

@@ -1,0 +1,13 @@
+body {
+    background-color: #eef2f7;
+    font-family: Arial, sans-serif;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}

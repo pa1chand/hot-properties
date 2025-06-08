@@ -73,6 +73,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
 
+
     public List<Property> getPropertyByAgentId(Long agentId) {
         User currentUser = userService.getCurrentUser();
         return propertyRepository.findByUser_Id (currentUser.getId());

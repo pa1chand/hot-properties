@@ -13,7 +13,9 @@ public interface PropertyService {
 
     void updateProperty(Property savedProperty);
 
+
     List<Property> getPropertyByAgentId(Long agentId);
+
 
 
 
