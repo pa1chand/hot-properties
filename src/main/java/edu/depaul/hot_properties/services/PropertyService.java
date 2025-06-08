@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+
 public interface PropertyService {
     Property addProperty(Property property);
 
@@ -15,6 +16,9 @@ public interface PropertyService {
 
 
     List<Property> getPropertyByAgentId(Long agentId);
+
+    List<Property> getAllProperties();
+
 
 
 

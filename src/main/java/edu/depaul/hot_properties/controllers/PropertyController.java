@@ -2,6 +2,7 @@ package edu.depaul.hot_properties.controllers;
 
 
 import edu.depaul.hot_properties.entities.Property;
+import edu.depaul.hot_properties.entities.User;
 import edu.depaul.hot_properties.repositories.PropertyRepository;
 import edu.depaul.hot_properties.services.PropertyService;
 import edu.depaul.hot_properties.services.UserService;
@@ -32,7 +33,7 @@ public class PropertyController {
     @GetMapping("/add")
     public String showAddProperty(Model model) {
         model.addAttribute("property", new Property());
-        return "property";
+        return "propertyadd";
         }
     // add property
 
@@ -50,7 +51,7 @@ public class PropertyController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "testing";
+        return "redirect:/dashboard";
     }
     @GetMapping("/list")
     public String browseProperties(@RequestParam(required = false) String location, Model model) {
@@ -70,6 +71,16 @@ public class PropertyController {
                 .orElseThrow(() -> new RuntimeException("view property controller is not working"));
         model.addAttribute("viewProperty", property);
         return "view";
+    }
+    // properties/manage
+    @GetMapping("/manage")
+    public String manageProperty( Model model) {
+        User currentUser = userService.getCurrentUser();
+        List<Property> properties = propertyService.getPropertyByAgentId(currentUser.getId());
+
+        model.addAttribute("properties", properties);
+
+        return "manage_properties";
     }
 }
 

@@ -214,7 +214,7 @@ public class UserAccountController {
     public String manageUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "manage_users";
+        return "manage_properties";
     }
 
     @PreAuthorize("hasRole('ADMIN')")

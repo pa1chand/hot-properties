@@ -24,10 +24,10 @@
         </li>
 
         <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
-            <a th:href="@{/agent/managelistings}">Manage Listings</a>
+            <a th:href="@{/properties/manage}">Manage Listings</a>
         </li>
         <li th:if="${#authorization.expression('hasRole(''AGENT'')')}">
-            <a th:href="@{/agent/addproperty}">Add New Property</a>
+            <a th:href="@{/properties/add}">Add New Property</a>
         </li>
         <li th:if="${#authorization.expression('hasRole(''BUYER'')')}">
             <a th:href="@{/properties/list}">Browse Properties</a>
