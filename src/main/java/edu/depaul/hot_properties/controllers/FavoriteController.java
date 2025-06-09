@@ -47,6 +47,12 @@ public class FavoriteController {
         return "redirect:/properties/list";
     }
 
+    @PostMapping("/remove/favorites")
+    public String removeFavorite1(@RequestParam Long propertyId) {
+        favoriteService.deleteFavorite(propertyId);
+        return "redirect:/favorites/favorites";
+    }
+
 
 
 
