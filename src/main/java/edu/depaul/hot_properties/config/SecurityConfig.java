@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers("/", "/index", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/index", "/css/**", "/js/**", "/images/**", "/profile-pictures/**", "/webjars/**").permitAll()
 
                         .requestMatchers("/property/**").hasAnyRole("AGENT","ADMIN")
                         .requestMatchers("/property/list").permitAll()

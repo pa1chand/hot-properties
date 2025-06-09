@@ -2,12 +2,15 @@ package edu.depaul.hot_properties.controllers;
 
 
 import edu.depaul.hot_properties.entities.Property;
+import edu.depaul.hot_properties.entities.PropertyImage;
 import edu.depaul.hot_properties.entities.User;
 import edu.depaul.hot_properties.services.AuthService;
+import edu.depaul.hot_properties.services.FileStorageService;
 import edu.depaul.hot_properties.services.PropertyService;
 import edu.depaul.hot_properties.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -30,6 +33,10 @@ public class UserAccountController {
     private final AuthService authService;
     private final UserService userService;
     private final PropertyService propertyService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
 
     public UserAccountController(AuthService authService, UserService userService, PropertyService propertyService) {
         this.authService = authService;
@@ -186,24 +193,27 @@ public class UserAccountController {
     // add property
     @PreAuthorize("hasAnyRole('ADMIN','AGENT')")
     @PostMapping("/property/add")
-    public String addProperty(@ModelAttribute("property") Property property,
-                              @RequestParam(value = "file", required = false) List<MultipartFile> files,
-                              RedirectAttributes redirectAttributes
-    ) {
+    public String addProperty(@ModelAttribute Property property,
+                              @RequestParam("imageFiles") MultipartFile[] imageFiles,
+                              RedirectAttributes redirectAttributes) {
         try {
-            Property savedProperty = propertyService.addProperty(property);
+            // attach user
+            User currentUser = userService.getCurrentUser();
+            property.setUser(currentUser);
 
-            // Then, store the profile picture (if uploaded) and update the property
-            if (files != null && !files.isEmpty()) {
-                propertyService.storeProfilePictures(savedProperty.getId(), files);
-            }
-            redirectAttributes.addFlashAttribute("successMessage", "Property added successfully.");
-            return "redirect:/dashboard";
+
+            Property savedProperty = propertyService.addProperty(property, imageFiles);
+            redirectAttributes.addFlashAttribute("message", "Property '" + savedProperty.getTitle() + "' added successfully!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
-            return "redirect:/dashboard";
+            redirectAttributes.addFlashAttribute("message", "Error adding property: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("messageType", "error");
+
         }
-        //return "propertyadd";
+
+        return "redirect:/property/add";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -231,9 +241,85 @@ public class UserAccountController {
     @GetMapping("/property/managelistings")
     public String manageListing(Model model) {
         User currentUser = userService.getCurrentUser();
-        model.addAttribute("listings", propertyService.getPropertyByAgentId(currentUser.getId()));
+        // Ensure propertyService.getPropertyByAgentId returns a list of properties for the current user
+        List<Property> agentProperties = propertyService.getPropertyByAgentId(currentUser.getId());
+        model.addAttribute("properties", agentProperties);
+        return "manage-properties";
+    }
+    @PreAuthorize("hasRole('AGENT')")
+    @GetMapping("/property/edit/{id}")
+    public String editProperty(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        Property property = propertyService.getPropertyById(id);
+        if (property == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Property not found.");
+            return "redirect:/property/managelistings";
+        }
 
-        return "my_team";
+        User currentUser = userService.getCurrentUser();
+        if (!property.getUser().getId().equals(currentUser.getId())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not authorized to edit this property.");
+            return "redirect:/property/managelistings";
+        }
+
+        model.addAttribute("property", property);
+        return "propertyadd";
+    }
+    @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/property/edit/{id}")
+    public String updateProperty(@PathVariable Long id,
+                                 @ModelAttribute Property updatedProperty,
+                                 @RequestParam("imageFiles") MultipartFile[] imageFiles,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            Property existingProperty = propertyService.getPropertyById(id);
+            if (existingProperty == null) {
+                redirectAttributes.addFlashAttribute("message", "Property not found.");
+                redirectAttributes.addFlashAttribute("messageType", "error");
+                return "redirect:/property/managelistings";
+            }
+
+            User currentUser = userService.getCurrentUser();
+            if (!existingProperty.getUser().getId().equals(currentUser.getId())) {
+                redirectAttributes.addFlashAttribute("message", "Unauthorized update attempt.");
+                redirectAttributes.addFlashAttribute("messageType", "error");
+                return "redirect:/property/managelistings";
+            }
+
+            // Update basic fields
+            existingProperty.setTitle(updatedProperty.getTitle());
+            existingProperty.setPrice(updatedProperty.getPrice());
+            existingProperty.setLocation(updatedProperty.getLocation());
+            existingProperty.setSize(updatedProperty.getSize());
+
+            // Optional: Handle new image uploads
+            if (imageFiles != null && imageFiles.length > 0) {
+                propertyService.updatePropertyImages(existingProperty, imageFiles); // create this method in service
+            }
+
+            propertyService.updateProperty(existingProperty);
+
+            redirectAttributes.addFlashAttribute("message", "Property updated successfully!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Error updating property: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("messageType", "error");
+        }
+
+        return "redirect:/property/managelistings";
+    }
+    @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/property/delete/{id}")
+    public String deleteProperty(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            propertyService.deleteProperty(id);
+            redirectAttributes.addFlashAttribute("message", "Property deleted successfully!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Error deleting property: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("messageType", "error");
+        }
+        return "redirect:/property/managelistings";
     }
 
 

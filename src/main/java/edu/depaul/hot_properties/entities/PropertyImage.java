@@ -9,23 +9,25 @@ public class PropertyImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String imageFileName;
+    // Stores the file path or URL to the image on the server/storage.
+    private String filePath;
 
-    //• Many-to-one: associated property.
-    @ManyToOne
-    @JoinColumn(name = "property_id")
+    // Many-to-One relationship with Property.
+    // Many images can belong to one property.
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading for performance
+    @JoinColumn(name = "property_id", nullable = false) // Foreign key column
     private Property property;
 
-
-
-    public PropertyImage() {}
-
-    public PropertyImage(Long id, String imageFileName) {
-        this.id = id;
-        this.imageFileName = imageFileName;
+    // Default constructor is required by JPA
+    public PropertyImage() {
     }
 
+    public PropertyImage(String filePath, Property property) {
+        this.filePath = filePath;
+        this.property = property;
+    }
+
+    // --- Getters and Setters ---
     public Long getId() {
         return id;
     }
@@ -34,12 +36,12 @@ public class PropertyImage {
         this.id = id;
     }
 
-    public String getImageFileName() {
-        return imageFileName;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public Property getProperty() {
@@ -48,5 +50,14 @@ public class PropertyImage {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", filePath='" + filePath + '\'' +
+                ", property_id=" + (property != null ? property.getId() : "null") +
+                '}';
     }
 }

@@ -28,25 +28,12 @@ public class Property {
     @Column(nullable = false)
     private Integer size;
 
-    //• Many-to-one: the user who listed the property.
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    //• One-to-many: images of the property.
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    List<PropertyImage> images = new ArrayList<>();
-    /*
-    //• Many-to-many: users who have favorited this property.
-    @ManyToMany(mappedBy = "favoritedProperties")
-    List<User> favoritedUser = new ArrayList<>();
-
-
-    // One-to-many: Message
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Message> associatedProperty = new ArrayList<>();
-    */
+    private List<PropertyImage> images = new ArrayList<>();
 
     public Property() {}
 
@@ -57,76 +44,57 @@ public class Property {
         this.description = description;
         this.location = location;
         this.size = size;
-
     }
 
-    public Long getId() {
-        return id;
-    }
+    // Getters and Setters
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
 
-    public String getTitle() {
-        return title;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getTitle() { return title; }
 
-    public Double getPrice() {
-        return price;
-    }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+    public Double getPrice() { return price; }
 
-    public String getDescription() {
-        return description;
-    }
+    public void setPrice(Double price) { this.price = price; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDescription() { return description; }
 
-    public String getLocation() {
-        return location;
-    }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    public String getLocation() { return location; }
 
-    public Integer getSize() {
-        return size;
-    }
+    public void setLocation(String location) { this.location = location; }
 
-    public void setSize(Integer size) {
-        this.size = size;
-    }
+    public Integer getSize() { return size; }
 
-    public User getUser() {
-        return user;
-    }
+    public void setSize(Integer size) { this.size = size; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public User getUser() { return user; }
 
-    public List<PropertyImage> getImages() {
-        return images;
-    }
+    public void setUser(User user) { this.user = user; }
+
+    public List<PropertyImage> getImages() { return images; }
 
     public void setImages(List<PropertyImage> images) {
-        this.images = images;
+        this.images.clear();
+        for (PropertyImage image : images) {
+            addImage(image);
+        }
     }
 
-    public void addImage(PropertyImage propertyImage) {
-        images.add(propertyImage);
-        propertyImage.setProperty(this);
+
+    public void addImage(PropertyImage image) {
+        images.add(image);
+        image.setProperty(this); // maintain bidirectional consistency
+    }
+
+    public void removeImage(PropertyImage image) {
+        images.remove(image);
+        image.setProperty(null);
     }
 }
+
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Property</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-green {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-blue {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="form-container">
+    <h2>Add New Property</h2>
+
+    <form th:action="@{/properties/add}" th:object="${property}" method="post" enctype="multipart/form-data">
+        <label for="title">Title for property:</label>
+        <input type="text" th:field="*{title}" id="title" required />
+
+        <label for="price">Price:</label>
+        <input type="number" th:field="*{price}" id="price" required step="0.01" />
+
+        <label for="location">Location:</label>
+        <input type="text" th:field="*{location}" id="location" required />
+
+        <label for="size">Size (sq ft):</label>
+        <input type="number" th:field="*{size}" id="size" required />
+
+        <label for="description">Description:</label>
+        <textarea th:field="*{description}" id="description" rows="4" required></textarea>
+
+        <label for="images">Upload Property Images:</label>
+        <input type="file" name="images" id="images" multiple accept="image/*" />
+
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-green">Add Property</button>
+            <a th:href="@{/properties/manage}" class="btn btn-blue">Manage Properties</a>
+            <a th:href="@{/dashboard}" class="btn btn-blue">Back to Dashboard</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -45,10 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.startsWith("/login") || path.startsWith("/css") || path.startsWith("/register") || path.startsWith("/images")) {
+        if (path.startsWith("/login") || path.startsWith("/register") ||
+                path.startsWith("/css") || path.startsWith("/images") ||
+                path.startsWith("/js") || path.startsWith("/favicon.ico") ||
+                path.equals("/error") ||   path.startsWith("/profile-pictures")) {
             filterChain.doFilter(request, response);
-            return;
-        }
+            return;}
+
 
         String token = null;
 
