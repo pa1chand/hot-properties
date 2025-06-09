@@ -9,9 +9,7 @@ import edu.depaul.hot_properties.repositories.PropertyRepository;
 import edu.depaul.hot_properties.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
@@ -58,12 +56,15 @@ public class FavoriteServiceImpl implements FavoriteService {
         // get user all favorite , favorite also have properties
         List<Favorite> favorites = favoriteRepository.findByBuyer(user);
 
+        Set<Long> uniqueProperties = new LinkedHashSet<>();
         List<Property> properties = new ArrayList<>();
         for (Favorite favorite : favorites) {
-            properties.add(favorite.getProperty());
+            Property property = favorite.getProperty();
+            if(uniqueProperties.add(property.getId())) {
+                properties.add(favorite.getProperty());
+            }
         }
         return properties;
-
     }
 
     @Override
