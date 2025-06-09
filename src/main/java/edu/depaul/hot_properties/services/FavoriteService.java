@@ -11,5 +11,7 @@ public interface FavoriteService {
     void addFavorite(Long propertyId);
 
     List<Property> getFavoriteProperties();
+
+    @PreAuthorize("hasAnyRole('AGENT','ADMIN', 'BUYER')")
     void deleteFavorite(Long propertyId);
 }

@@ -31,12 +31,22 @@
     <td th:text="${property.price}">Price</td>
     <td th:text="${property.size}">Size</td>
     <td th:text="${property.description}">Description</td>
-    <td th:each="image : ${property.images}">
+    <td>
+    <div th:each="image : ${property.images}">
       <img th:src="@{'/uploads/profile-pictures/' + ${image.imageFileName}}" alt="property image"
            width="200" height="200"
       />
+    </div>
+    </td>
+
+    <td>
+    <form th:action="@{/remove/favorites}" method="post">
+      <input type="hidden" name="propertyId" th:value="${property.id}" />
+      <button type="submit">Unfavorite</button>
+    </form>
     </td>
   </tr>
+
   </tbody>
 </table>
 

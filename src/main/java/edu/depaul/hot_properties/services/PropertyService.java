@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public interface PropertyService {
+
     Property addProperty(Property property);
 
     String storeProfilePictures(Long propertyId, List<MultipartFile> file);
