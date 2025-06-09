@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Property View</title>
+
+</head>
+<body>
+<div class="header">
+    <div th:replace="fragments/header :: header"></div>
+    <div class="back-link">
+        <a th:href="@{/dashboard}">← Back to Dashboard</a>
+    </div>
+</div>
+    <h1 th:text="${viewProperty.title}"></h1>
+    <h3 th:text="${viewProperty.price}"></h3>
+    <h3 th:text="${viewProperty.size}"></h3>
+    <h3 th:text="${viewProperty.description}"></h3>
+    <h2>Property Images</h2>
+
+<div th:each="image : ${viewProperty.images}">
+    <img th:src="@{'/uploads/profile-pictures/' + ${image.imageFileName}}"  width ="150px" height="150px" />
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Favorites</title>
+</head>
+<body>
+<div class="header">
+  <div th:replace="fragments/header :: header"></div>
+  <div class="back-link">
+    <a th:href="@{/dashboard}">← Back to Dashboard</a>
+  </div>
+</div>
+<h1>Your Favorited Properties</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Location</th>
+    <th>Price</th>
+    <th>Size</th>
+    <th>Description</th>
+    <th>Image</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="property : ${properties}">
+    <td th:text="${property.title}">Title</td>
+    <td th:text="${property.location}">Location</td>
+    <td th:text="${property.price}">Price</td>
+    <td th:text="${property.size}">Size</td>
+    <td th:text="${property.description}">Description</td>
+    <td th:each="image : ${property.images}">
+      <img th:src="@{'/uploads/profile-pictures/' + ${image.imageFileName}}" alt="property image"
+           width="200" height="200"
+      />
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -52,10 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/", "/index", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-
-                        .requestMatchers("/property/**").hasAnyRole("AGENT","ADMIN")
-                        .requestMatchers("/property/list").permitAll()
-
+                        .requestMatchers("/properties/list").permitAll()
+                        .requestMatchers("/favorites").hasRole("BUYER")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

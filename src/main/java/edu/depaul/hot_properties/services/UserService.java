@@ -39,4 +39,7 @@ public interface UserService {
 
     @PreAuthorize("isAuthenticated()")
     User getCurrentUser();
+
+    List<Long> getFavoritedPropertyIdsForCurrentUser();
+
 }

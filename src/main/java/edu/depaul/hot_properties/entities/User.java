@@ -31,6 +31,18 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    //• Many-to-many: users who have favorited this property.
+    @ManyToMany
+    @JoinTable(
+            name = "favoritedProperties",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "property_id")
+    )
+    private List<Property> favoritedProperties = new ArrayList<>();
+
+    // One-to-many: favorited properties (for Buyers).
+    @OneToMany(mappedBy="buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Property> properties = new ArrayList<>();
@@ -54,7 +66,6 @@ public class User {
     private List<User> subordinates = new ArrayList<>();
 
     // agent
-
     @Column()
     private String profilePicture; // stores filename or relative path
 
@@ -156,6 +167,30 @@ public class User {
     public void addEmployee(User u1) {
         this.subordinates.add(u1);
         u1.setManager(this);
+    }
+
+    public List<Property> getFavoritedProperties() {
+        return favoritedProperties;
+    }
+
+    public void setFavoritedProperties(List<Property> favoritedProperties) {
+        this.favoritedProperties = favoritedProperties;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
+    }
+
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
     }
 }
 

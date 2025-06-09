@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findByUser_Id(Long id);
+}
 

@@ -86,6 +86,9 @@ public class UserAccountController {
         return "dashboard";
     }
 
+    // show the current url
+
+
     @GetMapping("/profile")
     @PreAuthorize("hasAnyRole('BUYER', 'AGENT', 'ADMIN')")
     public String showProfile(Model model) {
@@ -211,7 +214,7 @@ public class UserAccountController {
     public String manageUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "manage_users";
+        return "manage_properties";
     }
 
     @PreAuthorize("hasRole('ADMIN')")

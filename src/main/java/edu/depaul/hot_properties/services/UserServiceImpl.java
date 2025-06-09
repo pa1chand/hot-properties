@@ -1,11 +1,12 @@
 package edu.depaul.hot_properties.services;
 
 
-import edu.depaul.hot_properties.entities.User;
 import edu.depaul.hot_properties.entities.Role;
+import edu.depaul.hot_properties.entities.User;
 import edu.depaul.hot_properties.repositories.RoleRepository;
 import edu.depaul.hot_properties.repositories.UserRepository;
 import edu.depaul.hot_properties.utils.CurrentUserContext;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -179,6 +180,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
+    @Override
+    public List<Long> getFavoritedPropertyIdsForCurrentUser() {
+        User currentUser = getCurrentUser();
+
+        User freshUser = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return freshUser.getFavoritedProperties()
+                .stream()
+                .map(property -> property.getId())
+                .toList();
+    }
 
     @Override
     public void updateUser(User savedUser) {
